@@ -3,7 +3,21 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import datetime
-df = pd.read_csv("snapshot_7.csv")
+df = pd.read_csv("snapshot_8.csv")
+
+
+def get_summary(df,varaible):
+    counts = df[varaible].value_counts()
+
+    percentages = (counts / len(df)) * 100
+
+    summary_df = pd.DataFrame({'Frequency': counts, 'Percentage': percentages.round(2)})
+
+    total_row = pd.DataFrame({'Frequency': [len(df)], 'Percentage': [100.00]}, index=['Total'])
+    summary_df = pd.concat([summary_df, total_row])
+    return summary_df
+
+
 st.html("<h1>Patterns of Cigaret and Hooka Smoking in Southern Iran a Descriptive Cross-Sectional Study</h1>")
 st.write("Authors: Gholamreza Abdollahifar, Mehrdad Anvar , ... ")
 st.write("")
@@ -51,26 +65,12 @@ st.divider()
 
 # You can also use "with" notation:
 st.subheader("Results")
-st.html("<h3>Descriptive Statistics</h3>")
+st.html("<h3>Demographics</h3>")
 st.write("Over the course of the study period, starting from January 2021 to December 2021 a total number of 2110 individuals completed the questionnair ")
 
 
-# st.table(df["res_time_sec"].quantile([0.5,0.10,0.25, 0.5, 0.75,0.90, 0.95,0.99]))
-# arr = df["age"]
-# fig, ax = plt.subplots()
-# ax.hist(arr, bins=20,   alpha=0.50,range=(0,80), color="green",density=True)
-# ax.set_xlabel("Response Time (sec)")
-# ax.set_ylabel("Count")
-# st.pyplot(fig)
-# st.table(df["age"].describe())
-# st.table(pd.DataFrame(df["age"].describe().apply(lambda x: f"{x:.1f}")).transpose())
 
-# st.table(df.groupby("surveyor")["res_time_sec"].describe())
-# st.write("lorem 100 ipsum ")
-# st.subheader("lorem 100 ipsum ")
-# st.header("lorem 100 ipsum ")
-# st.caption("lorem 100 ipsum ")
-tab1, tab2, tab3 = st.tabs(["Age", "Gender", "Occupation"])
+tab1, tab2, tab3 ,tab4,tab5 = st.tabs(["Age", "Gender", "Occupation","Education","Province"])
 
 with tab1:
     st.html("<h4>Age Chracterisitcs of the Study Population</h4>")
@@ -110,20 +110,8 @@ with tab2:
 with tab3:
     st.html("<h4>Occupation Chracterisitcs of the Study Population</h4>")
     col5, col6 = st.columns(2)
-    counts = df['occupation'].value_counts()
-
-# Calculate percentages
-    percentages = (counts / len(df)) * 100
-
-# Create a summary DataFrame
-    summary_df = pd.DataFrame({'Frequency': counts, 'Percentage': percentages.round(2)})
-
-# Add a total row
-    total_row = pd.DataFrame({'Frequency': [len(df)], 'Percentage': [100.00]}, index=['Total'])
-    summary_df = pd.concat([summary_df, total_row])
-
-# Display the table in Streamlit
-    col5.table(summary_df)
+    
+    col5.table(get_summary(df,"occupation"))
     
 
     occupation_counts = df['occupation'].value_counts()
@@ -133,6 +121,27 @@ with tab3:
     ax.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
     ax.set_title('Distribution of Occupation')
     col6.pyplot(fig)
+with tab4:
+    st.html("<h4>Education Chracterisitcs of the Study Population</h4>")
+    col7, col8 = st.columns(2)
+    mine = get_summary(df,"education")
+    col7.table(mine.style.format(precision=1).format_index(str.lower,axis=0)\
+               .set_caption("Distribution of Education")\
+               .set_table_styles([{"selector": "th", "props": "text-align: center"},
+                                  {"selector": "td", "props": "text-align: center"},
+                                  ]))
+with tab5:
+    st.html("<h4>Province Chracterisitcs of the Study Population</h4>")
+    col9, col10 = st.columns(2)
+    mine = get_summary(df,"province")
+    col9.table(mine.style.format(precision=1).format_index(str.lower,axis=0)\
+               .set_caption("Distribution of Province")\
+               .set_table_styles([{"selector": "th", "props": "text-align: center"},
+                                  {"selector": "td", "props": "text-align: center"},
+                                  ]))
+
+st.html("<h3>Descriptive Statistics</h3>")
+
 st.divider()
 st.subheader("Discussion & Conclusion")
 st.write("To be written")

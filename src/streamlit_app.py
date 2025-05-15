@@ -11,5 +11,5 @@ def page_2():
 
 
 
-pg = st.navigation(["Home.py", "page_2.py","Data Preparation.py"])
+pg = st.navigation(["Home.py", "page_2.py","Indeces.py"])
 pg.run()

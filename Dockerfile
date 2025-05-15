@@ -12,7 +12,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends git && rm -rf /
 RUN git clone https://github.com/mehrdadanvar/hooka.git /app
 
 # Change the working directory to the cloned repository directory.
-WORKDIR /app/hooka
 
 # Install only the required Python dependencies. Use `--no-cache-dir` to keep the image size small.
 RUN pip install --no-cache-dir streamlit pandas matplotlib numpy
