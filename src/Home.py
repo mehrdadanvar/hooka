@@ -17,6 +17,16 @@ def get_summary(df,varaible):
     summary_df = pd.concat([summary_df, total_row])
     return summary_df
 
+def cat_sum(series,category):
+    #return series.value_counts()/len(series)*100
+    count = series[series == category].count()
+    total = len(series)
+    if total > 0:
+        percentage = (count / total) * 100
+        return f"{count} ({percentage:.0f}%)"
+    else:
+        return "0(0%)"
+
 
 st.html("<h1>Patterns of Cigaret and Hooka Smoking in Southern Iran a Descriptive Cross-Sectional Study</h1>")
 st.write("Authors: Gholamreza Abdollahifar, Mehrdad Anvar , ... ")
@@ -140,8 +150,42 @@ with tab5:
                                   {"selector": "td", "props": "text-align: center"},
                                   ]))
 
-st.html("<h3>Descriptive Statistics</h3>")
+st.html("<h3>Descriptive Statistics of Public Perceptions and Attitudes Towards Tobacco and Hookah Use</h3>")
 
+st.write("""A substantial majority of respondents (63%) expressed agreement with the prohibition of hookah smoking in enclosed public spaces,
+          while a slightly smaller but still considerable proportion (49%) concurred with similar restrictions in open public areas. 
+         Exposure to anti-smoking advertisements in the media was prevalent for slightly under half the respondents (47%),
+          contrasting with a significantly lower incidence of exposure to anti-tobacco messaging at sporting events (27%).
+         Experiences with being offered complimentary tobacco products were reported by over a quarter of the participants (28%).
+         Furthermore, a considerable segment of the surveyed population (56%) perceived quitting hookah or cigarettes as a difficult endeavor, and an overwhelming majority (82%) recognized the harmful nature of these products.
+        Misconceptions regarding harm reduction were evident in a small fraction (7%) believing that water filtration renders hookah smoke harmless, and a similarly low percentage (6%) suggesting that flavorings mitigate the potential harm.
+          Workplace smoking restrictions were reported by approximately half of the respondents (51%). 
+         Of the totall particiapants, 47 % responded with use of tobacco products either regularly or occasionally.""")
+g_cols = [col for col in df.columns if col.startswith("g_") and "g_q11" not in col]
+yes = df[g_cols].apply(lambda x:cat_sum(x, "Yes"))
+no = df[g_cols].apply(lambda x:cat_sum(x, "No"))
+null = df[g_cols].apply(lambda x:cat_sum(x, "Null"))
+summary_table = pd.concat([yes, no, null], axis=1)  # axis=1 for column-wise concatenation
+summary_table.columns = ['Yes', 'No', 'Null']
+
+row_labels = ["Do you agree with the law prohibiting hookah smoking in public places ('served' in enclosed spaces like cafes, restaurants, etc.)?",
+"Do you agree with the law prohibiting hookah smoking in public places ('served' in open spaces like parks, beaches, etc.)?",
+"In the past month, have you seen or heard any anti-smoking advertisements in the media (television, radio, social networks, etc.)?",
+"Over the past month, have you seen or heard any anti-tobacco messages at sporting events?",
+"Have you ever been offered a free hookah or cigarette by someone working in a tobacco shop or distribution center??",
+"Do you think it will be difficult for someone to quit if they start using hookah or cigarettes?",
+"Do you think using hookah or cigarettes is harmful?",
+"Do you think that passing hookah smoke through water makes it harmless?",
+"In your opinion, does the flavor or type of hookah (e.g., fruit flavors) reduce its harm if any?",
+"Are there any restrictions on smoking in your workplace?",
+"Do you currently use any tobacco products (cigarettes or hookah)?"]
+
+    # Create a dictionary to map old index to new labels
+label_map = dict(zip(g_cols, row_labels))
+
+    # Rename the index
+new_table = summary_table.rename(label_map,axis="index")
+st.table(new_table.style.set_table_styles([{"selector":"th","props":"max-width: 150px"}]))
 st.divider()
 st.subheader("Discussion & Conclusion")
 st.write("To be written")
