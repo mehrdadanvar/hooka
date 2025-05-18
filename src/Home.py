@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import datetime
+from tableone import TableOne
 df = pd.read_csv("snapshot_8.csv")
 
 
@@ -186,6 +187,70 @@ label_map = dict(zip(g_cols, row_labels))
     # Rename the index
 new_table = summary_table.rename(label_map,axis="index")
 st.table(new_table.style.set_table_styles([{"selector":"th","props":"max-width: 150px"}]))
+
+
+st.html("<h3>Associations Between Sociodemographic Factors, Attitudes, and Smoking Status</h3>")
+st.write("The majority of the sample (53.5%) reported never having smoked, while regular hookah use (19.8%) was more prevalent than regular cigarette use (11.2%), and occasional hookah use (10.4%) was more common than occasional cigarette use (5.1%). Overall, nearly half of the respondents reported some form of current tobacco use.")
+st.write("""
+Based on the chi-square tests, a statistically significant association with smoking status was observed for gender (χ 
+2
+ <0.001), with a higher proportion of males reporting current smoking compared to females. Educational attainment also demonstrated a significant inverse relationship with smoking status (χ 
+2 <0.001), indicating lower rates of smoking across higher educational levels. The prevalence of tobacco use differed across occupational groups where individuals employed as workers or unemployed had the highest rate of smoking while school and university students along with other employees experienced the lowerst rates (χ 
+2
+ <0.001). Agreement with the prohibition of hookah smoking in both enclosed (χ 
+2
+ <0.001) and open public spaces (χ 
+2
+ <0.001) was significantly linked to smoking status, with those disagreeing showing a higher likelihood of being smokers. Exposure to anti-smoking advertisements in the past month was significantly associated with smoking status (χ 
+2
+ <0.001), as was the history of being offered free tobacco samples (χ 
+2
+ <0.001). The perceived difficulty of quitting tobacco use also showed a significant association with current smoking status (χ 
+2
+ <0.001), as did the perceived harmfulness of smoking (χ 
+2
+ <0.001). Furthermore, the belief that hookah flavor reduces harm was significantly associated with smoking status (χ 
+2
+ <0.001), and the presence of workplace smoking restrictions also demonstrated a significant association (χ 
+2
+ <0.001). As expected, current tobacco use was strongly and significantly associated with the outcome variable of smoking status (χ 
+2
+ <0.001). In contrast, the belief that water filtration makes hookah harmless (χ 
+2
+ =0.203) and whether smoking was allowed in public venues (χ 
+2
+ =0.566) did not show a statistically significant association with smoking status in this sample.
+""")
+
+formats = ["plain",'simple','github','grid','fancy_grid','pipe',
+'orgtbl','jira','presto','psql','rst','mediawiki','moinmoin',
+'youtrack','html','latex','latex_raw','latex_booktabs', 'textile']
+
+labels={"gender":"Gender",
+        "education":"Education",
+        "occupation":"Occupation",
+        "g_q1_public_indoor":"Public Indoor",
+        "g_q2_public_outdoor":"Public Outdoor",
+        "g_q3_anti_smoking_ads":"Anti-Smoking Ads Socail",
+        "g_q4_smoking_public_venues":"Anti-Smoking Ads Sports",
+        "g_q5_accept_free_hookah":"Accept Free Hookah",
+        "g_q6_quit_difficulty":"Quit Difficulty",
+        "g_q7_harmful_hookah_cigarettes":"Harmful Smoking",
+        "g_q8_water_filter_harmless":"Water Filter Harmless",
+        "g_q9_flavor_reduce_harm":"Flavor Reduces Harm",
+        "g_q10_workplace_smoking_restrictions":"Workplace Smoking Restrictions",
+        "g_q12_current_tobacco_use":"Current Tobacco Use",
+        }
+from tableone import TableOne
+categorical = ["gender","education","occupation"] + g_cols
+print(categorical)
+thistable = TableOne(df,categorical,categorical=categorical,groupby="g_q12_current_tobacco_use",rename=labels,dip_test=True,pval=True,row_percent=True,missing=False)
+
+
+
+
+
+st.write(thistable.tabulate(tablefmt = "github"))
+
 st.divider()
 st.subheader("Discussion & Conclusion")
-st.write("To be written")
