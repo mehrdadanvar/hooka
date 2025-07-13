@@ -1,10 +1,10 @@
 
 
 import streamlit as st
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-import datetime
+# import pandas as pd
+# import numpy as np
+# import matplotlib.pyplot as plt
+# import datetime
 st.set_page_config(layout="wide")
 def page_2():
     st.title("Page 2")

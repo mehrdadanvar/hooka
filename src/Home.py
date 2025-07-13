@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import datetime
 from tableone import TableOne
-df = pd.read_csv("snapshot_8.csv")
+df = pd.read_csv("snapshot_9.csv")
 
 
 def get_summary(df,varaible):
@@ -29,29 +29,32 @@ def cat_sum(series,category):
         return "0(0%)"
 
 
-st.html("<h1>Patterns of Cigaret and Hooka Smoking in Southern Iran a Descriptive Cross-Sectional Study</h1>")
-st.write("Authors: Gholamreza Abdollahifar, Mehrdad Anvar , ... ")
+st.html("<h1 >Patterns of Cigaret and Hooka Smoking in Southern Iran a Descriptive Cross-Sectional Study</h1>")
+st.write("Authors: Gholamreza Abdollahifard, Mehrdad Anvar , ... ")
 st.write("")
 st.html("<p style='font-style: oblique;'> Affiliation: Shiraz University of Medical Sciences, Department of Community Medicine, Shiraz, Iran.</p>")
 
 
 abstract = st.expander("Abstract", icon=":material/info:")
-abstract.subheader("Abstract")
-abstract.write("Inside the expander.")
+abstract.html("""<p>
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum magnam neque enim commodi esse atque corrupti,
+      necessitatibus cum, voluptas odit inventore nihil autem tempore vero molestiae tenetur labore! Possimus, minima.
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum magnam neque enim commodi esse atque corrupti,
+      necessitatibus cum, voluptas odit inventore nihil autem tempore vero molestiae tenetur labore! Possimus, minima.
+    </p>""")
 
+intro_container = st.container(border=False,key="intro")
 
-st.subheader("Introduction")
-st.write("Tobacco use, in its various forms, remains a significant global public health concern, contributing substantially to morbidity and mortality worldwide [Reference 1]. While cigarette smoking has been extensively studied, the prevalence and patterns of other tobacco products, such as hookah (waterpipe) smoking, are gaining increasing attention, particularly in regions of the Middle East and North Africa [Reference 2]. Hookah smoking, often perceived as less harmful than cigarette smoking, presents a unique set of health risks and social contexts that warrant thorough investigation [Reference 3]. Understanding the epidemiology of both cigarette and hookah smoking within specific populations is crucial for developing targeted public health interventions and informing tobacco control policies.")
+intro_container.subheader("Introduction")
+intro_container.write("Tobacco use, in its various forms, remains a significant global public health concern, contributing substantially to morbidity and mortality worldwide [Reference 1]. While cigarette smoking has been extensively studied, the prevalence and patterns of other tobacco products, such as hookah (waterpipe) smoking, are gaining increasing attention, particularly in regions of the Middle East and North Africa [Reference 2]. Hookah smoking, often perceived as less harmful than cigarette smoking, presents a unique set of health risks and social contexts that warrant thorough investigation [Reference 3]. Understanding the epidemiology of both cigarette and hookah smoking within specific populations is crucial for developing targeted public health interventions and informing tobacco control policies.")
 
-st.write("In Iran, while national tobacco control programs exist, regional variations in smoking behaviors and attitudes necessitate localized research. Southern Iran, with its distinct cultural and socio-economic characteristics, may exhibit unique patterns of tobacco use that have yet to be comprehensively elucidated. Investigating the prevalence, patterns, and associated factors of both cigarette and hookah smoking in this region is essential for understanding the local burden of tobacco use and informing culturally relevant prevention and cessation strategies. Furthermore, exploring the knowledge, attitudes, and cessation behaviors related to both smoking methods within this population can provide valuable insights for tailoring interventions.")
+intro_container.write("In Iran, while national tobacco control programs exist, regional variations in smoking behaviors and attitudes necessitate localized research. Southern Iran, with its distinct cultural and socio-economic characteristics, may exhibit unique patterns of tobacco use that have yet to be comprehensively elucidated. Investigating the prevalence, patterns, and associated factors of both cigarette and hookah smoking in this region is essential for understanding the local burden of tobacco use and informing culturally relevant prevention and cessation strategies. Furthermore, exploring the knowledge, attitudes, and cessation behaviors related to both smoking methods within this population can provide valuable insights for tailoring interventions.")
 
-st.write("To address this gap in knowledge, this descriptive epidemiological study was conducted to investigate the patterns of cigarette and hookah smoking among adult residents of Southern Iran. By employing a cross-sectional design and a comprehensive data collection strategy, this research aimed to provide a detailed characterization of smoking behaviors, knowledge, and attitudes towards tobacco use in this region. The findings of this study will contribute to a more nuanced understanding of the tobacco epidemic in Southern Iran and provide crucial data for public health planning and intervention development.")
+intro_container.write("To address this gap in knowledge, this descriptive epidemiological study was conducted to investigate the patterns of cigarette and hookah smoking among adult residents of Southern Iran. By employing a cross-sectional design and a comprehensive data collection strategy, this research aimed to provide a detailed characterization of smoking behaviors, knowledge, and attitudes towards tobacco use in this region. The findings of this study will contribute to a more nuanced understanding of the tobacco epidemic in Southern Iran and provide crucial data for public health planning and intervention development.")
 
-
-st.divider()
-st.subheader("Materials & Methods")
-with open("sample.html", "r") as f:
-    st.html(f.read())
+intro_container.subheader("Materials & Methods")
+with open("main.html", "r") as f:
+    intro_container.html(f.read())
 # st.header("Materials & Methods")
 # st.subheader("Study Design and Population")
 # st.write("This descriptive epidemiological study employed a cross-sectional design to investigate the patterns of cigarette and hookah smoking within the population of Southern Iran. Data were collected using a combination of in-person surveys and an online questionnaire distribution strategy. The target population included adult residents of Southern Iran.")
@@ -84,26 +87,17 @@ st.write("Over the course of the study period, starting from January 2021 to Dec
 tab1, tab2, tab3 ,tab4,tab5 = st.tabs(["Age", "Gender", "Occupation","Education","Province"])
 
 with tab1:
+    df["outcome"] = 1
     st.html("<h4>Age Chracterisitcs of the Study Population</h4>")
     st.write("The age distribution of the dataset, comprising 2,110 individuals, reveals a mean age of approximately 39.8 years with a standard deviation of 13.3 years, indicating a moderate spread around the average. Ages range from a minimum of 9 to a maximum of 80 years. The interquartile range (IQR), spanning from 30 to 49 years, contains the middle 50% of the ages, with the median age (50th percentile) being 38 years, slightly lower than the mean, suggesting a mild skew towards younger ages.")
     col1, col2 = st.columns(2)
-    col1.table(df.age.describe())
+    desc_df = df[["age", "gender", "education"]]
+    # desc_table = TableOne(df,["age","gender","education"],categorical=["gender","education"],continuous=["age"], groupby="outcome",missing=False,row_percent=False,)
+    desc_table = TableOne(desc_df, dip_test=True,missing=False)
+    html_table =desc_table.to_html(classes=["mytable"])
+    col1.markdown(html_table, unsafe_allow_html=True)
+
     
-
-    fig, ax = plt.subplots()
-    ax.boxplot(df['age'])
-    ax.set_title('Boxplot of Age')
-    ax.set_ylabel('Age')
-
-    col2.pyplot(fig)
-    # arr = df["age"]
-    # fig, ax = plt.subplots()
-    # ax.hist(arr, bins=20,   alpha=0.50,range=(0,80), color="green",density=True)
-    # ax.set_xlabel("Age (years)")
-    # ax.set_ylabel("Count")
-    # st.pyplot(fig)
-    # ax.set_ylabel("Count")
-    # st.pyplot(fig)
     
 with tab2:
     st.html("<h4>Gender Chracterisitcs of the Study Population</h4>")
@@ -151,6 +145,124 @@ with tab5:
                                   {"selector": "td", "props": "text-align: center"},
                                   ]))
 
+
+
+
+
+st.divider()
+st.html("<h3>Prevlaence and Predictors of Cigarette and Hookah Smoking in Southern Iran</h3>")
+
+prev_tab, gender_tab ,age_tab ,edu_tab, occ_tab = st.tabs(["Prevalence by Useage Pattern", "Gender", "Age", "Education", "Occupation"])
+with prev_tab:
+    container = st.container(border=False)
+    container.write("Of the 2097 participants surveyed, the majority (n=1121, 53.46%) reported never having smoked. Regular hookah use was the most prevalent pattern (n=416, 19.84%), followed by regular cigarette use (n=235, 11.21%). Occasional hookah use was observed in 219 participants (10.44%), while occasional cigarette use was reported by 106 individuals (5.05%). Overall, 46.54% of the respondents reported some form of current tobacco use.")
+    labels={"g_q11_current_tobacco_use":"Current Tobacco Use"}
+    prev_table = TableOne(df,["g_q11_current_tobacco_use"],categorical=["g_q11_current_tobacco_use"],missing=False,labels=labels)
+    html_table =prev_table.to_html(classes=["mytable"])
+    container.markdown("""
+        <style>
+        .mytable {
+        font-size: 12pt;
+        }
+
+        .mytable {
+        border-top: 2px solid gray;
+        border-bottom: 2px solid gray;
+        border-left: 2px solid transparent;
+        border-right: 2px solid transparent;
+        }
+        .mytable thead {
+        border-bottom: 2px solid gray;
+        }
+        
+
+        .mytable th, .mytable td {
+        border: 1px solid white;
+        text-align: center;
+        padding: 10px 10px;
+        font-size: 12pt;
+        font-style: normal;
+        fot-weight: 20;
+        }
+        </style>
+        """, unsafe_allow_html=True)
+    container.html("<caption> Table 4-1 Prevalence of Current Tobacco Use</caption>")
+    container.markdown(html_table, unsafe_allow_html=True)
+
+with gender_tab:
+    container = st.container(border=False)
+    container.html("<p style='padding:20px 20px;'> Further analysis, as presented in Table 4-2, explored the prevalence of cigarette and hookah smoking by gender. Occasional and regular cigarette use was significantly more prevalent among men (8.7% and 19.1%, respectively) than women (0.9% and 2.2%). In contrast, the prevalence of occasional and regular hookah smoking was similar for both genders. Overall, men demonstrated a significantly higher likelihood of reporting current tobacco use compared to women.</p>")
+    order = {"g_q11_current_tobacco_use":["Occasional cigarette","Regular cigarette","Occasional hookah","Regular hookah"]}
+    gender_table = TableOne(df,["gender"],categorical=["gender"], groupby="g_q11_current_tobacco_use",missing=False,row_percent=True,order=order)
+    container.markdown(gender_table.to_html(classes=["mytable"]), unsafe_allow_html=True)
+
+with age_tab:
+    container = st.container(border=False)
+    start = 9
+    max_age = df['age'].max()
+    end = int(np.ceil(max_age / 10.0) * 10) + 10  # ensure upper edge covers all ages
+    # bins = list(range(10, 70, 10)) + [70, df['age'].max() + 1]  # e.g., [10,20,30,...,70, max+1]
+    # labels = [f"{i}-{i+9}" for i in bins[:-1]]
+    # df['age_group'] = pd.cut(df['age'], bins=bins, labels=labels, right=False)
+    bins = [9, 20, 30, 65, np.inf]  # upper bounds are exclusive unless right=True
+    labels = ['9-19', '20-29', '30-64', '65+']
+    df['age_group'] = pd.cut(df['age'], bins=bins, labels=labels, right=False)
+    order = {"g_q11_current_tobacco_use":["Occasional cigarette","Regular cigarette","Occasional hookah","Regular hookah"]}
+
+    age_table = TableOne(df,["age_group"],categorical=["age_group"], groupby="g_q11_current_tobacco_use",missing=False,row_percent=True,order=order)
+    container.markdown(age_table.to_html(classes=["mytable"]), unsafe_allow_html=True)
+
+with edu_tab:
+    container = st.container(border=False)
+
+    order = {"g_q11_current_tobacco_use":["Occasional cigarette","Regular cigarette","Occasional hookah","Regular hookah"],"new_education":["Limited Education","High School", "College", "Bachelor's Degree and Higher"]}
+    education_map = {
+    "No Education": "Limited Education",
+    "Literacy Movement": "Limited Education",
+    "Elementary School": "Limited Education",
+    "Middle School": "High School",
+    "High School": "High School",
+    "Technical School": "High School",  # optionally keep in High School
+    
+    "Pre-University": "College",
+    "Diploma": "College",
+    
+    "Bachelor's Degree": "Bachelor's Degree and Higher",
+    "Master's Degree": "Bachelor's Degree and Higher",
+    "PhD and Higher": "Bachelor's Degree and Higher"
+    }
+    df['new_education'] = df['education'].map(education_map)
+    labels={"new_education":"Education","g_q11_current_tobacco_use":"Current Tobacco Use"}
+
+
+    edu_table = TableOne(df,["new_education"],categorical=["new_education"], groupby="g_q12_current_tobacco_use",missing=False,row_percent=True,order=order,labels=labels,pval=True)
+    container.markdown(edu_table.to_html(classes=["mytable"]), unsafe_allow_html=True)
+
+
+with occ_tab:
+    container = st.container(border=False)
+    order = {"g_q11_current_tobacco_use":["Occasional cigarette","Regular cigarette","Occasional hookah","Regular hookah"],"occupation":["Worker","Unemployed","Self-Employed","Retired","Housewife","Employee","School Student","University Student"]}
+    occ_table = TableOne(df,["occupation"],categorical=["occupation"], groupby="g_q11_current_tobacco_use",missing=False,row_percent=True,order=order,labels=labels,pval=True)
+    container.markdown(occ_table.to_html(classes=["mytable"]), unsafe_allow_html=True)
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+st.divider()
+
 st.html("<h3>Descriptive Statistics of Public Perceptions and Attitudes Towards Tobacco and Hookah Use</h3>")
 
 st.write("""A substantial majority of respondents (63%) expressed agreement with the prohibition of hookah smoking in enclosed public spaces,
@@ -184,20 +296,31 @@ row_labels = ["Do you agree with the law prohibiting hookah smoking in public pl
     # Create a dictionary to map old index to new labels
 label_map = dict(zip(g_cols, row_labels))
 
+
+#st.markdown(att_table.to_html(classes=["mytable"]), unsafe_allow_html=True)
     # Rename the index
 new_table = summary_table.rename(label_map,axis="index")
-st.table(new_table.style.set_table_styles([{"selector":"th","props":"max-width: 150px"}]))
+# st.html(new_table.to_html(classes=["myta"]))
+st.table(new_table.style.set_table_styles([{"selector": "th", "props": [("max-width", "200px"), ("padding", "10px 10px")]}]))
+st.divider()
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 st.html("<h3>Associations Between Sociodemographic Factors, Attitudes, and Smoking Status</h3>")
 st.write("The majority of the sample (53.5%) reported never having smoked, while regular hookah use (19.8%) was more prevalent than regular cigarette use (11.2%), and occasional hookah use (10.4%) was more common than occasional cigarette use (5.1%). Overall, nearly half of the respondents reported some form of current tobacco use.")
 st.write("""
-Based on the chi-square tests, a statistically significant association with smoking status was observed for gender (χ 
-2
- <0.001), with a higher proportion of males reporting current smoking compared to females. Educational attainment also demonstrated a significant inverse relationship with smoking status (χ 
-2 <0.001), indicating lower rates of smoking across higher educational levels. The prevalence of tobacco use differed across occupational groups where individuals employed as workers or unemployed had the highest rate of smoking while school and university students along with other employees experienced the lowerst rates (χ 
-2
- <0.001). Agreement with the prohibition of hookah smoking in both enclosed (χ 
+ Agreement with the prohibition of hookah smoking in both enclosed (χ 
 2
  <0.001) and open public spaces (χ 
 2
@@ -213,9 +336,7 @@ Based on the chi-square tests, a statistically significant association with smok
 2
  <0.001), and the presence of workplace smoking restrictions also demonstrated a significant association (χ 
 2
- <0.001). As expected, current tobacco use was strongly and significantly associated with the outcome variable of smoking status (χ 
-2
- <0.001). In contrast, the belief that water filtration makes hookah harmless (χ 
+ <0.001).The belief that water filtration makes hookah harmless (χ 
 2
  =0.203) and whether smoking was allowed in public venues (χ 
 2
@@ -241,16 +362,27 @@ labels={"gender":"Gender",
         "g_q10_workplace_smoking_restrictions":"Workplace Smoking Restrictions",
         "g_q12_current_tobacco_use":"Current Tobacco Use",
         }
-from tableone import TableOne
-categorical = ["gender","education","occupation"] + g_cols
-print(categorical)
+categorical =  g_cols
 thistable = TableOne(df,categorical,categorical=categorical,groupby="g_q12_current_tobacco_use",rename=labels,dip_test=True,pval=True,row_percent=True,missing=False)
 
 
 
 
 
-st.write(thistable.tabulate(tablefmt = "github"))
+st.write(thistable)
 
 st.divider()
+st.subheader("Cigarette & Hooka Smoking Prevalence in Southern Iran")
 st.subheader("Discussion & Conclusion")
+st.html("<h2>Discussion & Conclusion</h2>")
+mine = pd.DataFrame({
+    "strings": ["Adam", "Mike"],
+    "ints": [1, 3],
+    "floats": [1.123, 1000.23]
+})
+mine.style \
+  .format(precision=3, thousands=".", decimal=",") \
+  .format_index(str.upper, axis=1) \
+  .relabel_index(["row 1", "row 2"], axis=0)
+
+st.table(mine)
