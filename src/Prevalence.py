@@ -4,11 +4,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 import datetime
 from tableone import TableOne
-df = pd.read_csv("snapshot_9.csv")
+import pandas as pd
+import io
+
+df = pd.read_csv("./snapshot_10.csv")
 
 
-def get_summary(df,varaible):
-    counts = df[varaible].value_counts()
+def get_summary(df,variable):
+    counts = df[variable].value_counts()
 
     percentages = (counts / len(df)) * 100
 
@@ -29,6 +32,7 @@ def cat_sum(series,category):
         return "0(0%)"
 
 
+
 st.html("<h1 >Patterns of Cigaret and Hooka Smoking in Southern Iran a Descriptive Cross-Sectional Study</h1>")
 st.write("Authors: Gholamreza Abdollahifard, Mehrdad Anvar , ... ")
 st.write("")
@@ -45,6 +49,7 @@ abstract.html("""<p>
 
 intro_container = st.container(border=False,key="intro")
 
+
 intro_container.subheader("Introduction")
 intro_container.write("Tobacco use, in its various forms, remains a significant global public health concern, contributing substantially to morbidity and mortality worldwide [Reference 1]. While cigarette smoking has been extensively studied, the prevalence and patterns of other tobacco products, such as hookah (waterpipe) smoking, are gaining increasing attention, particularly in regions of the Middle East and North Africa [Reference 2]. Hookah smoking, often perceived as less harmful than cigarette smoking, presents a unique set of health risks and social contexts that warrant thorough investigation [Reference 3]. Understanding the epidemiology of both cigarette and hookah smoking within specific populations is crucial for developing targeted public health interventions and informing tobacco control policies.")
 
@@ -55,19 +60,7 @@ intro_container.write("To address this gap in knowledge, this descriptive epidem
 intro_container.subheader("Materials & Methods")
 with open("main.html", "r") as f:
     intro_container.html(f.read())
-# st.header("Materials & Methods")
-# st.subheader("Study Design and Population")
-# st.write("This descriptive epidemiological study employed a cross-sectional design to investigate the patterns of cigarette and hookah smoking within the population of Southern Iran. Data were collected using a combination of in-person surveys and an online questionnaire distribution strategy. The target population included adult residents of Southern Iran.")
-# st.subheader("Data Collection")
-# st.html("<p>here is th link <a href='/page_2'>another page</a> </p>")
-# st.html("<ol> <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</li> <li>Ut enim ad minim veniam, quis nostrud exercitation ollamco laboris nisi ut aliquip ex ea commodo consequat.</li> </ol>")
-# st.write("This study was conducted in 2019 in Southern Iran")
-# st.html("<h1>title</h1>")
-# st.html("<h2 style='background-color: gray ; border-radius: 10px; '>title</h2>")
-# st.html("<h3>title</h3>")
-# st.html("<h4>title</h4>")
-# st.html("<h5>title</h5>")
-# st.html("<h6>title</h6>")
+
 
 
 
@@ -78,105 +71,86 @@ st.divider()
 # pop.checkbox("Show all")
 
 # You can also use "with" notation:
-st.subheader("Results")
-st.html("<h3>Demographics</h3>")
-st.write("Over the course of the study period, starting from January 2021 to December 2021 a total number of 2110 individuals completed the questionnair ")
+st.subheader("3. Results")
+st.html("<h3>3.1 Demographics</h3>")
+
+desc_col1,desc_col2 = st.columns([2,2])
+
+desc_col1.write("Over the course of the study period, starting from January 2021 to December 2021 a total number of 2110 individuals completed the questionnaire with a mean age of 39.8 years  (SD=13.3). Females accounted for 976 individuals (46.5%), while 53.5% of the participants were males. The education levels within the study population varied, with a substantial portion having attained a post-secondary degree. The largest group of participants, 756 individuals (36.1%), reported having a bachelor's degree or higher. This was followed by those with a college education, comprising 544 individuals (25.9%). A high school education was held by 490 participants (23.4%), while 307 individuals (14.6%) had limited education. ")
+desc_col1.write("The occupational distribution of the study population was diverse. The largest single group was composed of housewifes, representing 516 individuals (24.6%). This was followed by self-employed participants, who accounted for 473 individuals (22.6%). Employees comprised 347 individuals (16.5%), and individuals classified as workers made up 271 (12.9%). The remaining participants were distributed among several other categories: 167 were retired (8.0%), 130 were university students (6.2%), 117 were unemployed (5.6%), and 76 were school students (3.6%).")
+
+
+desc_col1.html("<h3>3.2 Prevalence and Predictors of Cigarette and Hookah Smoking</h3>")
+desc_col1.write("Among the 2097 participants surveyed, 69% (n=1446) had never smoked, resulting in a 31% point prevalence of current tobacco use. A key finding was that the prevalence of regular hookah smoking (19.8%) was higher than that of regular cigarette smoking (11.2%). Univariate chi-square tests were performed to assess the relationship between various independent variables and current tobacco use. The results indicated a significant difference in smoking prevalence between genders, with men (40.4%) being significantly more likely to smoke than women (20.3%). The prevalence of smoking increased consistently from 19% in individual younger than 25 to 35.6% in the 45-55 year-old age bracket. This was followed by a decrease in the older age groups with participants >65 reaching a 27.8% prevalence of tobacco use. Participants' education level was noticeably associated with smoking status, where individuals with limited education reporting the highest rate of tobacco use (40.7%), while survey respondents with a bachelor's degree or higher reported a lower prevalence (17.3%). Similarly, the respondents' occupation was significantly associated with smoking status, where university and highschool students along with employees had the lowest prevalence () while workers ,self-employed  ,the unemployed and retired individuals reported the highest rates (36.8% respectively).")
 
 
 
-tab1, tab2, tab3 ,tab4,tab5 = st.tabs(["Age", "Gender", "Occupation","Education","Province"])
 
-with tab1:
-    df["outcome"] = 1
-    st.html("<h4>Age Chracterisitcs of the Study Population</h4>")
-    st.write("The age distribution of the dataset, comprising 2,110 individuals, reveals a mean age of approximately 39.8 years with a standard deviation of 13.3 years, indicating a moderate spread around the average. Ages range from a minimum of 9 to a maximum of 80 years. The interquartile range (IQR), spanning from 30 to 49 years, contains the middle 50% of the ages, with the median age (50th percentile) being 38 years, slightly lower than the mean, suggesting a mild skew towards younger ages.")
-    col1, col2 = st.columns(2)
-    desc_df = df[["age", "gender", "education"]]
-    # desc_table = TableOne(df,["age","gender","education"],categorical=["gender","education"],continuous=["age"], groupby="outcome",missing=False,row_percent=False,)
-    desc_table = TableOne(desc_df, dip_test=True,missing=False)
-    html_table =desc_table.to_html(classes=["mytable"])
-    col1.markdown(html_table, unsafe_allow_html=True)
+
+desc_df = df[["age", "gender", "new_education","occupation","g_12_final_tobacco_use"]]
+labels={"age":"Age","gender":"Gender","new_education":"Education","occupation":"Occupation"}
+rename={"age":"Age","gender":"Gender","new_education":"Education","occupation":"Occupation"}
+desc_table = TableOne(desc_df, dip_test=True,missing=False,continuous=["age"],labels=labels,htest=True,htest_name=True,rename=rename)
+html_table =desc_table.to_html(classes=["MyTable"])
+desc_col2.html(html_table)
+
+
+    
 
     
     
-with tab2:
-    st.html("<h4>Gender Chracterisitcs of the Study Population</h4>")
-    st.write("The gender distribution within the dataset shows a slightly higher representation of males (مرد) with a count of 1,129 (53.5%), compared to females (زن) who account for 981(46.5%) individuals.")
-    col3, col4 = st.columns(2)
-    col3.table(df.gender.value_counts())
-    
+table_vars = ['g_q1_public_indoor',
+ 'g_q2_public_outdoor',
+ 'g_q3_anti_smoking_ads',
+ 'g_q4_smoking_public_venues',
+ 'g_q5_accept_free_hookah',
+ 'g_q6_quit_difficulty',
+ 'g_q7_harmful_hookah_cigarettes',
+ 'g_q8_water_filter_harmless',
+ 'g_q9_flavor_reduce_harm',
+ 'g_q10_workplace_smoking_restrictions','g_12_final_tobacco_use']
 
-    gender_counts = df['gender'].value_counts()
-    fig, ax = plt.subplots()
-    ax.pie(gender_counts, labels=gender_counts.index, autopct='%1.1f%%', startangle=90)
-    ax.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
-    ax.set_title('Distribution of Gender')
-    col4.pyplot(fig)
-with tab3:
-    st.html("<h4>Occupation Chracterisitcs of the Study Population</h4>")
-    col5, col6 = st.columns(2)
-    
-    col5.table(get_summary(df,"occupation"))
-    
-
-    occupation_counts = df['occupation'].value_counts()
-    fig, ax = plt.subplots()
-    colors = ['#333333', '#4D4D4D', '#666666', '#808080', '#999999', '#B3B3B3', '#CCCCCC', '#E6E6E6']
-    ax.pie(occupation_counts, labels=occupation_counts.index, autopct='%1.1f%%', startangle=90, colors=colors)
-    ax.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
-    ax.set_title('Distribution of Occupation')
-    col6.pyplot(fig)
-with tab4:
-    st.html("<h4>Education Chracterisitcs of the Study Population</h4>")
-    col7, col8 = st.columns(2)
-    mine = get_summary(df,"education")
-    col7.table(mine.style.format(precision=1).format_index(str.lower,axis=0)\
-               .set_caption("Distribution of Education")\
-               .set_table_styles([{"selector": "th", "props": "text-align: center"},
-                                  {"selector": "td", "props": "text-align: center"},
-                                  ]))
-with tab5:
-    st.html("<h4>Province Chracterisitcs of the Study Population</h4>")
-    col9, col10 = st.columns(2)
-    mine = get_summary(df,"province")
-    col9.table(mine.style.format(precision=1).format_index(str.lower,axis=0)\
-               .set_caption("Distribution of Province")\
-               .set_table_styles([{"selector": "th", "props": "text-align: center"},
-                                  {"selector": "td", "props": "text-align: center"},
-                                  ]))
-
+att_df = df[table_vars]
+att_table = TableOne(att_df,categorical=table_vars,missing=False,row_percent=True,groupby="g_12_final_tobacco_use",pval=True)
+att_html_table =att_table.to_html(classes=["MyTable"])
+desc_col2.html(att_html_table)
 
 
 
 
 st.divider()
-st.html("<h3>Prevlaence and Predictors of Cigarette and Hookah Smoking in Southern Iran</h3>")
+   
 
-prev_tab, gender_tab ,age_tab ,edu_tab, occ_tab = st.tabs(["Prevalence by Useage Pattern", "Gender", "Age", "Education", "Occupation"])
+
+
+prev_tab, gender_tab ,age_tab ,edu_tab, occ_tab = st.tabs(["Prevalence by Usage Pattern", "Gender", "Age", "Education", "Occupation"])
 with prev_tab:
+    
+
     container = st.container(border=False)
     container.write("Of the 2097 participants surveyed, the majority (n=1121, 53.46%) reported never having smoked. Regular hookah use was the most prevalent pattern (n=416, 19.84%), followed by regular cigarette use (n=235, 11.21%). Occasional hookah use was observed in 219 participants (10.44%), while occasional cigarette use was reported by 106 individuals (5.05%). Overall, 46.54% of the respondents reported some form of current tobacco use.")
-    labels={"g_q11_current_tobacco_use":"Current Tobacco Use"}
-    prev_table = TableOne(df,["g_q11_current_tobacco_use"],categorical=["g_q11_current_tobacco_use"],missing=False,labels=labels)
-    html_table =prev_table.to_html(classes=["mytable"])
+    labels={"g_12_final_tobacco_use":"Current Tobacco Use"}
+    prev_table = TableOne(df,["g_12_final_tobacco_use"],categorical=["g_12_final_tobacco_use"],missing=False,labels=labels)
+    html_table =prev_table.to_html(classes=["MyTable"])
     container.markdown("""
         <style>
-        .mytable {
+        .MyTable {
         font-size: 12pt;
+                       
         }
 
-        .mytable {
+        .MyTable {
         border-top: 2px solid gray;
         border-bottom: 2px solid gray;
         border-left: 2px solid transparent;
         border-right: 2px solid transparent;
         }
-        .mytable thead {
+        .MyTable thead {
         border-bottom: 2px solid gray;
         }
         
 
-        .mytable th, .mytable td {
+        .MyTable th, .MyTable td {
         border: 1px solid white;
         text-align: center;
         padding: 10px 10px;
@@ -192,25 +166,25 @@ with prev_tab:
 with gender_tab:
     container = st.container(border=False)
     container.html("<p style='padding:20px 20px;'> Further analysis, as presented in Table 4-2, explored the prevalence of cigarette and hookah smoking by gender. Occasional and regular cigarette use was significantly more prevalent among men (8.7% and 19.1%, respectively) than women (0.9% and 2.2%). In contrast, the prevalence of occasional and regular hookah smoking was similar for both genders. Overall, men demonstrated a significantly higher likelihood of reporting current tobacco use compared to women.</p>")
-    order = {"g_q11_current_tobacco_use":["Occasional cigarette","Regular cigarette","Occasional hookah","Regular hookah"]}
-    gender_table = TableOne(df,["gender"],categorical=["gender"], groupby="g_q11_current_tobacco_use",missing=False,row_percent=True,order=order)
-    container.markdown(gender_table.to_html(classes=["mytable"]), unsafe_allow_html=True)
+    order = {"g_12_final_tobacco_use":["Occasional cigarette","Regular cigarette","Occasional hookah","Regular hookah"]}
+    gender_table = TableOne(df,["gender"],categorical=["gender"], groupby="g_12_final_tobacco_use",missing=False,row_percent=True)
+    container.markdown(gender_table.to_html(classes=["MyTable"]), unsafe_allow_html=True)
 
 with age_tab:
     container = st.container(border=False)
-    start = 9
-    max_age = df['age'].max()
-    end = int(np.ceil(max_age / 10.0) * 10) + 10  # ensure upper edge covers all ages
-    # bins = list(range(10, 70, 10)) + [70, df['age'].max() + 1]  # e.g., [10,20,30,...,70, max+1]
-    # labels = [f"{i}-{i+9}" for i in bins[:-1]]
+    # start = 9
+    # max_age = df['age'].max()
+    # end = int(np.ceil(max_age / 10.0) * 10) + 10  # ensure upper edge covers all ages
+    # # bins = list(range(10, 70, 10)) + [70, df['age'].max() + 1]  # e.g., [10,20,30,...,70, max+1]
+    # # labels = [f"{i}-{i+9}" for i in bins[:-1]]
+    # # df['age_group'] = pd.cut(df['age'], bins=bins, labels=labels, right=False)
+    # bins = [9, 20, 30, 65, np.inf]  # upper bounds are exclusive unless right=True
+    # labels = ['9-19', '20-29', '30-64', '65+']
     # df['age_group'] = pd.cut(df['age'], bins=bins, labels=labels, right=False)
-    bins = [9, 20, 30, 65, np.inf]  # upper bounds are exclusive unless right=True
-    labels = ['9-19', '20-29', '30-64', '65+']
-    df['age_group'] = pd.cut(df['age'], bins=bins, labels=labels, right=False)
-    order = {"g_q11_current_tobacco_use":["Occasional cigarette","Regular cigarette","Occasional hookah","Regular hookah"]}
+    # #order = {"g_q11_current_tobacco_use":["Occasional cigarette","Regular cigarette","Occasional hookah","Regular hookah"]}
 
-    age_table = TableOne(df,["age_group"],categorical=["age_group"], groupby="g_q11_current_tobacco_use",missing=False,row_percent=True,order=order)
-    container.markdown(age_table.to_html(classes=["mytable"]), unsafe_allow_html=True)
+    # age_table = TableOne(df,["age_group"],categorical=["age_group"], groupby="g_q11_current_tobacco_use",missing=False,row_percent=True)
+    # container.markdown(age_table.to_html(classes=["MyTable"]), unsafe_allow_html=True)
 
 with edu_tab:
     container = st.container(border=False)
@@ -235,15 +209,16 @@ with edu_tab:
     labels={"new_education":"Education","g_q11_current_tobacco_use":"Current Tobacco Use"}
 
 
-    edu_table = TableOne(df,["new_education"],categorical=["new_education"], groupby="g_q12_current_tobacco_use",missing=False,row_percent=True,order=order,labels=labels,pval=True)
-    container.markdown(edu_table.to_html(classes=["mytable"]), unsafe_allow_html=True)
+    edu_table = TableOne(df,["new_education"],categorical=["new_education"], groupby="g_12_final_tobacco_use",missing=False,row_percent=True,labels=labels,pval=True)
+    container.markdown(edu_table.to_html(classes=["MyTable"]), unsafe_allow_html=True)
 
 
 with occ_tab:
     container = st.container(border=False)
-    order = {"g_q11_current_tobacco_use":["Occasional cigarette","Regular cigarette","Occasional hookah","Regular hookah"],"occupation":["Worker","Unemployed","Self-Employed","Retired","Housewife","Employee","School Student","University Student"]}
-    occ_table = TableOne(df,["occupation"],categorical=["occupation"], groupby="g_q11_current_tobacco_use",missing=False,row_percent=True,order=order,labels=labels,pval=True)
-    container.markdown(occ_table.to_html(classes=["mytable"]), unsafe_allow_html=True)
+    order = {"g_q11_current_tobacco_use":["Occasional cigarette","Regular cigarette","Occasional hookah","Regular hookah"],
+             "occupation":["Worker","Unemployed","Self-Employed","Retired","Housewife","Employee","School Student","University Student"]}
+    occ_table = TableOne(df,["occupation"],categorical=["occupation"], groupby="g_12_final_tobacco_use",missing=False,row_percent=True,labels=labels,pval=True)
+    container.markdown(occ_table.to_html(classes=["MyTable"]), unsafe_allow_html=True)
 
   
 
@@ -297,11 +272,12 @@ row_labels = ["Do you agree with the law prohibiting hookah smoking in public pl
 label_map = dict(zip(g_cols, row_labels))
 
 
-#st.markdown(att_table.to_html(classes=["mytable"]), unsafe_allow_html=True)
+#st.markdown(att_table.to_html(classes=["MyTable"]), unsafe_allow_html=True)
     # Rename the index
 new_table = summary_table.rename(label_map,axis="index")
 # st.html(new_table.to_html(classes=["myta"]))
-st.table(new_table.style.set_table_styles([{"selector": "th", "props": [("max-width", "200px"), ("padding", "10px 10px")]}]))
+st.table(new_table.style.set_table_styles([{"selector": "th", "props": [("max-width", "200px"), ("padding", "10px 15px")]},
+                                           {"selector":"tbody", "props":[("max-width", "50%")]}]))
 st.divider()
 
 
@@ -363,13 +339,13 @@ labels={"gender":"Gender",
         "g_q12_current_tobacco_use":"Current Tobacco Use",
         }
 categorical =  g_cols
-thistable = TableOne(df,categorical,categorical=categorical,groupby="g_q12_current_tobacco_use",rename=labels,dip_test=True,pval=True,row_percent=True,missing=False)
+ThisTable = TableOne(df,categorical,categorical=categorical,groupby="g_q12_current_tobacco_use",rename=labels,dip_test=True,pval=True,row_percent=True,missing=False)
 
 
 
 
 
-st.write(thistable)
+st.write(ThisTable)
 
 st.divider()
 st.subheader("Cigarette & Hooka Smoking Prevalence in Southern Iran")
@@ -386,3 +362,107 @@ mine.style \
   .relabel_index(["row 1", "row 2"], axis=0)
 
 st.table(mine)
+
+
+def generate_apa_table(df: pd.DataFrame, column_name: str, table_number: int = 1, title: str = None) -> str:
+    """
+    Generates an APA style HTML table for a categorical variable in a pandas DataFrame,
+    displaying frequencies and percentages.
+
+    Args:
+        df (pd.DataFrame): The input pandas DataFrame.
+        column_name (str): The name of the categorical column to analyze.
+        table_number (int): The table number for the APA style table. Defaults to 1.
+        title (str, optional): The title of the table. If None, a default title is generated.
+
+    Returns:
+        str: An HTML string containing the APA formatted table.
+    """
+    if column_name not in df.columns:
+        return f"<p style='color: red;'>Error: Column '{column_name}' not found in the DataFrame.</p>"
+
+    # Ensure the column is treated as categorical for accurate counts
+    # Convert to category type if it's not already, to handle potential mixed types gracefully
+    try:
+        df[column_name] = df[column_name].astype('category')
+    except TypeError:
+        # If conversion fails (e.g., column contains unhashable types), treat as object
+        pass
+
+    # Calculate frequencies and percentages
+    counts = df[column_name].value_counts(dropna=False) # Include NaN as a category if present
+    percentages = (counts / counts.sum() * 100).round(2)
+
+    # Combine into a temporary DataFrame for easier formatting
+    table_df = pd.DataFrame({
+        'Frequency': counts,
+        'Percentage': percentages
+    })
+    table_df.index.name = 'Category'
+
+    # Add a total row
+    total_frequency = table_df['Frequency'].sum()
+    total_percentage = table_df['Percentage'].sum()
+    # Adjust total percentage to 100.00 if rounding caused it to be slightly off
+    if abs(total_percentage - 100.00) < 0.01:
+        total_percentage = 100.00
+
+    total_row = pd.DataFrame({
+        'Frequency': [total_frequency],
+        'Percentage': [total_percentage]
+    }, index=['Total'])
+    table_df = pd.concat([table_df, total_row])
+
+    # --- HTML Table Formatting ---
+    html_output = io.StringIO()
+
+    # Overall container for APA style (font, margin)
+    html_output.write(f"""
+    <div style="font-family: 'Times New Roman', Times, serif; font-size: 12pt; margin-bottom: 1em;">
+        <p style="margin: 0; font-weight: bold;">Table {table_number}</p>
+        <p style="font-style: italic; margin: 0;">{title if title else f"Frequencies and Percentages for {column_name.replace('_', ' ').title()}"}</p>
+        <table style="border-collapse: collapse; width: 50%; margin-top: 0.5em; border-bottom: 1px solid black;">
+            <thead>
+                <tr>
+                    <th style="border-bottom: 1px solid black; padding: 8px; text-align: left;">Category</th>
+                    <th style="border-bottom: 1px solid black; padding: 8px; text-align: right;">Frequency</th>
+                    <th style="border-bottom: 1px solid black; padding: 8px; text-align: right;">Percentage</th>
+                </tr>
+            </thead>
+            <tbody>
+    """)
+
+    # Data rows
+    for index, row in table_df.iterrows():
+        category_display = str(index) if pd.notna(index) else "Missing"
+        freq_display = int(row['Frequency'])
+        percent_display = f"{row['Percentage']:.2f}%"
+
+        if index == 'Total':
+            html_output.write(f"""
+                <tr>
+                    <td style="border-top: 1px solid black; padding: 8px; text-align: left; font-weight: bold;">{category_display}</td>
+                    <td style="border-top: 1px solid black; padding: 8px; text-align: right; font-weight: bold;">{freq_display}</td>
+                    <td style="border-top: 1px solid black; padding: 8px; text-align: right; font-weight: bold;">{percent_display}</td>
+                </tr>
+            """)
+        else:
+            html_output.write(f"""
+                <tr>
+                    <td style="padding: 8px; text-align: left;">{category_display}</td>
+                    <td style="padding: 8px; text-align: right;">{freq_display}</td>
+                    <td style="padding: 8px; text-align: right;">{percent_display}</td>
+                </tr>
+            """)
+
+    html_output.write("""
+            </tbody>
+        </table>
+    </div>
+    """)
+
+    return html_output.getvalue()
+
+gender_table_html = generate_apa_table(df, 'new_education', table_number=1, title="Participant Gender Distribution")
+# print(gender_table_html)
+st.html(gender_table_html)

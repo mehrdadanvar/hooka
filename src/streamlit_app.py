@@ -7,9 +7,9 @@ import streamlit as st
 # import datetime
 st.set_page_config(layout="wide")
 def page_2():
-    st.title("Page 2")
+    st.title("sample")
 
 
 
-pg = st.navigation(["Home.py", "page_2.py","Indeces.py"])
+pg = st.navigation(["Prevalence.py", "Cigarette_Smokers.py", "Hookah_Smokers.py","Indices.py"])
 pg.run()
